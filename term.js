@@ -118,7 +118,6 @@ Term.prototype.write = function (string) {
                              	j=3;
                              }
                              if(string[i+4]=='m' && !isNaN(parseInt(string.slice(i+2,i+4)))){
-                             	alert("true")
                                	j=4;
                              	var num=parseInt(string.slice(i+2,i+4));
                              	if(num>29 && num <38){
