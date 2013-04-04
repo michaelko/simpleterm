@@ -120,89 +120,16 @@ Term.prototype.write = function (string) {
                              	// alert("true")
                                	j=4;
                              	var num=parseInt(string.slice(i+2,i+4));
-                             	switch(num){
-                             		// Text
-                             		case 30: // black
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 0 << 3;
-                             			complete = true;
-                             			break;
-                             		case 31: //
-                              			this.cur_att &= 7;
-                             			this.cur_att |= 1 << 3;
-                             			complete = true;
-                             			break;
-                             		case 32: //
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 2 << 3;
-                             			complete = true;
-                             			break;
-                             		case 33:
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 3 << 3;
-                             			complete = true;
-                             			break;
-                             		case 34:
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 4 << 3;
-                             			complete = true;
-                             			break;
-                             		case 35:
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 5 << 3;
-                             			complete = true;
-                             			break;
-                             		case 36:
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 6 << 3;
-                             			complete = true;
-                             			break;
-                             		case 37:
-                             			this.cur_att &= 7;
-                             			this.cur_att |= 7 << 3;
-                             			complete = true;
-                             			break;
-                             		// Background
-                             		case 40:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 0;
-                             			complete = true;
-                             			break;
-                             		case 41:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 1;
-                             			complete = true;
-                             			break;
-                             		case 42:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 2;
-                             			complete = true;
-                             			break;
-                             		case 43:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 3;
-                             			complete = true;
-                             			break;
-                             		case 44:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 4;
-                             			complete = true;
-                             			break;
-                             		case 45:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 5;
-                             			complete = true;
-                             			break;
-                             		case 46:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 6;
-                             			complete = true;
-                             			break;
-                             		case 47:
-		              			this.cur_att &= 7 << 3;
-                             			this.cur_att |= 7;
-                             			complete = true;
-                             			break;
+                             	if(num>29 && num <38){
+                             		// Foreground
+                             		this.cur_att &= 7;
+                             		this.cur_att |= (num-30) << 3;
+                             		complete = true;
+                             	}
+                             	if(num>39 && num<48){
+		              		this.cur_att &= 7 << 3;
+                             		this.cur_att |= num-40;
+                             		complete = true;
                              	}
                              }
                         }                        
