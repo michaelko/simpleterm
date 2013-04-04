@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="jquery-1.7.2.js"></script>
+<script src="jquery-ui-1.8.18.custom.min.js"></script>
+
+
+<script src="term.js"></script>
+
+<style>
+.term {
+    font-family: courier,fixed,swiss,monospace,sans-serif;
+    font-size: 14px;
+    color: #f0f0f0;
+    background: #000000;
+}
+
+.termReverse {
+    color: #000000;
+    background: #00ff00;
+}
+#note {
+    font-size: 12px;
+}
+#copyright {
+    font-size: 10px;
+}
+#clipboard {
+    font-size: 12px;
+}
+#display {
+    font-family: courier,fixed,swiss,monospace,sans-serif;
+    font-size: 12px;
+    height: 60%;
+    overflow: scroll;
+}
+</style>
+<link href="jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
+<style>
+.ui-widget-content {
+    font-size: normal;
+}
+.tab {
+    font-size: 12px;
+}
+.ui-widget button, .ui-widget label {
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+<script>
+
+function termhandler(a){
+	console.log(a);
+}
+var term
+$(document).ready(function() {
+    term = new Term(80, 15, termhandler);
+    term.open();
+    
+    for(var i=0;i<1;i++){
+	    term.write("Booting Linux on physical CPU\r\n");
+	    term.write("Linux version 3.6.1 (ozaki-r@ubuntu-virtualbox) (gcc version 4.6.3 (Ubuntu/Linar)\r\n");
+	    term.write("#92 Sun Oct 28 03:38:56 JST 2012\r\n");
+	    term.write("CPU: ARMv7 Processor [411ff001] revision 1 (ARMv7), cr=10c03c7d\r\n");
+	    term.write("CPU: PIPT / VIPT nonaliasing data cache, VIVT ASID tagged instruction cache\r\n");
+	    term.write("Machine: ARM-Versatile Express, model: ARM-JS\r\n");
+	    term.write("bootconsole [earlycon0] enabled\r\n");
+	    term.write("Memory policy: ECC disabled, Data cache writeback\n\r");
+	    term.write(String.fromCharCode(33)+"[36m"+String.fromCharCode(33)+"[43m" +" Text"+String.fromCharCode(33)+"[m Normal"); // Esc
+	    term.write("\n\r");
+	    term.write(String.fromCharCode(33));
+	    //term.write("[42m Hallo");
+	    
+	    term.write("[4");
+	    term.write("2m Hallo\n\r");
+	    
+    }
+});
+ 
+</script>
+
+<div id=terminal tabindex=0></div>
+
+<a href="#" onclick="term.write('a');">write</a>
+
+</body>
+</html>
