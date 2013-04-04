@@ -6,7 +6,7 @@ function Term(width, height, hand) {
     this.y = 0;
     this.cursorstate = 0;
     this.handler = hand;
-    this.colors = ["#000", "#f00", "#0f0", "#ff0", "#00f", "#f0f", "#0ff", "#fff"];
+    this.colors = ["#000", "#e00", "#0e0", "#ee0", "#00e", "#e0e", "#0ee", "#eee"];
     this.def_attr = 7 << 3;
     this.cur_att = this.def_attr;
     this.buffer = "";
@@ -80,6 +80,7 @@ Term.prototype.show_cursor = function () {
 Term.prototype.write = function (string) {
 	string=this.buffer+string;
 	this.buffer="";
+	write:
 	for(var i=0;i<string.length;i++){
 		switch(string.charCodeAt(i)){
 		    case 10:  // \n
@@ -117,7 +118,7 @@ Term.prototype.write = function (string) {
                              	j=3;
                              }
                              if(string[i+4]=='m' && !isNaN(parseInt(string.slice(i+2,i+4)))){
-                             	// alert("true")
+                             	alert("true")
                                	j=4;
                              	var num=parseInt(string.slice(i+2,i+4));
                              	if(num>29 && num <38){
@@ -127,6 +128,7 @@ Term.prototype.write = function (string) {
                              		complete = true;
                              	}
                              	if(num>39 && num<48){
+                             	        // Background
 		              		this.cur_att &= 7 << 3;
                              		this.cur_att |= num-40;
                              		complete = true;
@@ -134,11 +136,12 @@ Term.prototype.write = function (string) {
                              }
                         }                        
                         if(!complete){
-                        	// alert("!com    i"+ i + "j"+j+string);
-                        	this.buffer=string.slice(i,i+j);
+                        	this.buffer=string.slice(i);
+                        	break write;
                         }
-                        else
+                        else{
                         	i+=j;
+                        }
                         break;
 		    default: // Normal char. Just display.
 			this.lines[(this.y + this.y_base)%this.h][this.x++]=string.charCodeAt(i) | this.cur_att << 16;
@@ -154,7 +157,7 @@ Term.prototype.write = function (string) {
                         this.lines[(this.y + this.y_base) % this.h]=this.newline.slice();
                         this.refresh(0, this.h-1);
                 }
-                // -1 bc. otherwise the cursor in the old position at a higher line might be still visible.
+                // -1 because otherwise the cursor in the old position at a higher line might be still visible.
                 this.refresh(Math.max(0,this.y-1), this.y);
 	}
 };
