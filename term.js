@@ -12,11 +12,11 @@ function Term(width, height, hand) {
     this.buffer = "";
 }
 Term.prototype.open = function () {
-    var y, i, ea, c;
+    var y;
     this.lines = new Array();
     this.newline = new Array();
-    for (i = 0; i < this.w; i++)
-         this.newline[i] = 32 | (this.def_attr << 16);;
+    for (y = 0; y < this.w; y++)
+         this.newline[y] = 32 | (this.def_attr << 16);
     for (y = 0; y < this.h+1; y++)
         this.lines[y] = this.newline.slice();
     for (y = 0; y < this.h; y++)
@@ -31,7 +31,7 @@ Term.prototype.open = function () {
 };
 
 Term.prototype.refresh = function (y1, y2) {
-    var ha, y, html, c, x, cursor_x, mode, lastmode, ay;
+    var y, html, c, x, cursor_x, mode, lastmode, ay;
     for (y = y1; y <= y2; y++) {
         ay = (y + this.y_base) % this.h;
         html = "";
@@ -117,7 +117,7 @@ Term.prototype.write = function (string) {
                              	j=3;
                              }
                              if(string[i+4]=='m' && !isNaN(parseInt(string.slice(i+2,i+4)))){
-                             	alert("true")
+                             	// alert("true")
                                	j=4;
                              	var num=parseInt(string.slice(i+2,i+4));
                              	switch(num){
@@ -207,7 +207,7 @@ Term.prototype.write = function (string) {
                              }
                         }                        
                         if(!complete){
-                        	alert("!com    i"+ i + "j"+j+string);
+                        	// alert("!com    i"+ i + "j"+j+string);
                         	this.buffer=string.slice(i,i+j);
                         }
                         else
