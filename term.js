@@ -1,3 +1,6 @@
+// https://github.com/michaelko/simpleterm
+// Released under the terms of the WTFPL
+
 function Term(width, height, hand) {
     this.w = width;
     this.h = height;
@@ -29,7 +32,6 @@ Term.prototype.open = function () {
         that.cursor_timer_cb();
     }, 1000);
 };
-
 Term.prototype.refresh = function (y1, y2) {
     var y, html, c, x, cursor_x, mode, lastmode, ay;
     for (y = y1; y <= y2; y++) {
@@ -69,14 +71,12 @@ Term.prototype.cursor_timer_cb = function () {
     this.cursor_state ^= 1;
     this.refresh(this.y, this.y);
 };
-
 Term.prototype.show_cursor = function () {
     if (!this.cursor_state) {
         this.cursor_state = 1;
         this.refresh(this.y, this.y);
     }
 };
-
 Term.prototype.write = function (string) {
 	string=this.buffer+string;
 	this.buffer="";
@@ -117,21 +117,42 @@ Term.prototype.write = function (string) {
                              	complete=true;
                              	j=3;
                              }
-                             if(string[i+4]=='m' && !isNaN(parseInt(string.slice(i+2,i+4)))){
+                             if(string.slice(i+1).match(/^\[[0-9]{2}m/)){
                                	j=4;
                              	var num=parseInt(string.slice(i+2,i+4));
                              	if(num>29 && num <38){
-                             		// Foreground
-                             		this.cur_att &= 7;
-                             		this.cur_att |= (num-30) << 3;
-                             		complete = true;
+                             	  // Foreground
+                             	  this.cur_att &= 7;
+                             	  this.cur_att |= (num-30) << 3;
+                             	  complete = true;
                              	}
                              	if(num>39 && num<48){
-                             	        // Background
-		              		this.cur_att &= 7 << 3;
-                             		this.cur_att |= num-40;
-                             		complete = true;
+                             	  // Background
+		              	  this.cur_att &= 7 << 3;
+                             	  this.cur_att |= num-40;
+                             	  complete = true;
                              	}
+                             }
+                             if(string.slice(i+1).match(/^\[[0-9]+,[0-9]+[Hf]/)){    // goto xy
+                                var pos= /^\[([0-9]+),([0-9]+)[Hf]/.exec(string.slice(i+1));
+                                this.x = parseInt(pos[1]);
+                                this.y = parseInt(pos[2]);
+                             	complete=true;
+                             	j=1+pos[0].length;
+                             }
+                             if(string.slice(i+1).match(/^\[2J/)){     // clear screen 
+				for (y = 0; y < this.h+1; y++)
+					this.lines[y] = this.newline.slice();
+				this.y_base=0;
+				this.x=this.y=0;
+				this.refresh(0,this.h-1);
+				j=3;
+				complete=true;
+                             }
+                             if(string.slice(i+1).match(/^\[6n/)){
+                             	j=3;
+                             	complete=true;
+                             	this.handler(string.fromCharCode(33)+"["+this.x+";"+this.y+"R");
                              }
                         }                        
                         if(!complete){
@@ -212,8 +233,6 @@ Term.prototype.keyDownHandler = function (event) {
         return true;
     }
 };
-
-
 Term.prototype.keyPressHandler = function (event) {
     if (event.stopPropagation) event.stopPropagation();
     if (event.preventDefault) event.preventDefault();

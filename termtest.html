@@ -72,11 +72,12 @@ $(document).ready(function() {
 	    term.write(String.fromCharCode(33)+"[36m"+String.fromCharCode(33)+"[43m" +" Text"+String.fromCharCode(33)+"[m Normal"); // Esc
 	    term.write("\n\r");
 	    term.write(String.fromCharCode(33));
-	    //term.write("[42m Hallo");
-	    
+	    term.write("[42m Hallo");
+	    term.write(String.fromCharCode(33));
 	    term.write("[4");
-	    term.write("2m Hallo\n\r");
-	    
+	    term.write("4m Hallo\n\r");
+	    term.write(String.fromCharCode(33)+"[0m ");
+	    term.write(String.fromCharCode(33)+"[3,3H"+ "    TEXT    ");
     }
 });
  
