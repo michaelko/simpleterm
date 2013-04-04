@@ -69,15 +69,15 @@ $(document).ready(function() {
 	    term.write("Machine: ARM-Versatile Express, model: ARM-JS\r\n");
 	    term.write("bootconsole [earlycon0] enabled\r\n");
 	    term.write("Memory policy: ECC disabled, Data cache writeback\n\r");
-	    term.write(String.fromCharCode(33)+"[36m"+String.fromCharCode(33)+"[43m" +" Text"+String.fromCharCode(33)+"[m Normal"); // Esc
+	    term.write(String.fromCharCode(27)+"[36m"+String.fromCharCode(27)+"[43m" +" Text"+String.fromCharCode(27)+"[m Normal"); // Esc
 	    term.write("\n\r");
-	    term.write(String.fromCharCode(33));
+	    term.write(String.fromCharCode(27));
 	    term.write("[42m Hallo");
-	    term.write(String.fromCharCode(33));
+	    term.write(String.fromCharCode(27));
 	    term.write("[4");
 	    term.write("4m Hallo\n\r");
-	    term.write(String.fromCharCode(33)+"[0m ");
-	    term.write(String.fromCharCode(33)+"[3,3H"+ "    TEXT    ");
+	    term.write(String.fromCharCode(27)+"[0m ");
+	    term.write(String.fromCharCode(27)+"[3,3H"+ "    TEXT    ");
     }
 });
  
