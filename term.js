@@ -78,6 +78,7 @@ Term.prototype.show_cursor = function () {
     }
 };
 Term.prototype.write = function (string) {
+	//alert(string);
 	string=this.buffer+string;
 	this.buffer="";
 	write:
@@ -100,7 +101,7 @@ Term.prototype.write = function (string) {
                             this.x = n;
                         }
                         break;
-                    case 33:   // ^[
+                    case 27:   // ^[
                     	// A Escape sequence. Trying to parse it, in case it is not complete abort and safe the bytes in buffer
                     	// See http://www-user.tu-chemnitz.de/~heha/hs_freeware/terminal/terminal.htm
                     	// http://www.termsys.demon.co.uk/vtansi.htm
@@ -154,7 +155,11 @@ Term.prototype.write = function (string) {
                              	complete=true;
                              	this.handler(string.fromCharCode(33)+"["+this.x+";"+this.y+"R");
                              }
-                        }                        
+                        } else if( typeof(string[i+1]) == "string"){
+                        	// There is a charater after esc, but it's not '[', simply ignor the esc.
+                        	this.buffer=string.slice(i+1);
+                        	complete=true;
+                        }                       
                         if(!complete){
                         	this.buffer=string.slice(i);
                         	break write;
