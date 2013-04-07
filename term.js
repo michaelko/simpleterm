@@ -123,9 +123,6 @@ Term.prototype.write = function (string) {
                                	j=m[0].length;
                                	complete=true;
                                	var numbers=m[0].match(/[0-9]*/g);
-                               	alert(JSON.stringify(numbers))
-
-                               	//alert(numbers.length);
                                	for(var n=0;n<numbers.length;n++){
                              		var num=parseInt(numbers[n]);
                              		if(isNaN(num)) continue;
