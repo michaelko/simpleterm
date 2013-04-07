@@ -105,7 +105,7 @@ Term.prototype.write = function (string) {
                     	// A Escape sequence. Trying to parse it, in case it is not complete abort and safe the bytes in buffer
                     	// See http://www-user.tu-chemnitz.de/~heha/hs_freeware/terminal/terminal.htm
                     	// http://www.termsys.demon.co.uk/vtansi.htm
-                    	// TODO.
+                    	// TODO. A not supported Esc sequence blocks all output. Fixit.
                         var complete=false,j=1;
                         if(string[i+1]=='['){
                              if(string[i+2] == 'm'){
@@ -118,21 +118,31 @@ Term.prototype.write = function (string) {
                              	complete=true;
                              	j=3;
                              }
-                             if(string.slice(i+1).match(/^\[[0-9]{2}m/)){
-                               	j=4;
-                             	var num=parseInt(string.slice(i+2,i+4));
-                             	if(num>29 && num <38){
-                             	  // Foreground
-                             	  this.cur_att &= 7;
-                             	  this.cur_att |= (num-30) << 3;
-                             	  complete = true;
+                             if(string.slice(i+1).match(/^\[[0-9;]*m/)){
+                                var m=/^\[[0-9;]*m/.exec(string.slice(i+1))
+                               	j=m[0].length;
+                               	complete=true;
+                               	var numbers=m[0].match(/[0-9]*/g);
+                               	alert(JSON.stringify(numbers))
+
+                               	//alert(numbers.length);
+                               	for(var n=0;n<numbers.length;n++){
+                             		var num=parseInt(numbers[n]);
+                             		if(isNaN(num)) continue;
+                             		if(num>29 && num <38){
+                             		  // Foreground
+                             		  this.cur_att &= 7;
+                             		  this.cur_att |= (num-30) << 3;
+                             		  complete = true;
+                             		}
+                             		if(num>39 && num<48){
+                             		  // Background
+		              		  this.cur_att &= 7 << 3;
+                             		  this.cur_att |= num-40;
+                             		  complete = true;
+                             		}
                              	}
-                             	if(num>39 && num<48){
-                             	  // Background
-		              	  this.cur_att &= 7 << 3;
-                             	  this.cur_att |= num-40;
-                             	  complete = true;
-                             	}
+                             	/**/
                              }
                              if(string.slice(i+1).match(/^\[[0-9]+,[0-9]+[Hf]/)){    // goto xy
                                 var pos= /^\[([0-9]+),([0-9]+)[Hf]/.exec(string.slice(i+1));

@@ -60,7 +60,7 @@ $(document).ready(function() {
     term = new Term(80, 15, termhandler);
     term.open();
     
-    for(var i=0;i<1;i++){
+    if(false){
 	    term.write("Booting Linux on physical CPU\r\n");
 	    term.write("Linux version 3.6.1 (ozaki-r@ubuntu-virtualbox) (gcc version 4.6.3 (Ubuntu/Linar)\r\n");
 	    term.write("#92 Sun Oct 28 03:38:56 JST 2012\r\n");
@@ -78,6 +78,8 @@ $(document).ready(function() {
 	    term.write("4m Hallo\n\r");
 	    term.write(String.fromCharCode(27)+"[0m ");
 	    term.write(String.fromCharCode(27)+"[3,3H"+ "    TEXT    ");
+    } else {
+    	term.write("\r\n9pnet: Installing 9P2000 support\r\n\x00Freeing init memory: 84K\r\nMounting procfs\r\nMounting v9fs at /v9fs\r\n9pnet_virtio: no channels available\r\nmount: mounting armjs on /v9fs failed: No such file or directory\r\n~ # cd /\r\n/ # ls\r\n\x1B[1;34mbin\x1B[0m   \x1B[1;34mdev\x1B[0m   \x1B[1;34metc\x1B[0m   \x1B[1;32minit\x1B[0m  \x1B[1;34mlib\x1B[0m   \x1B[1;34mproc\x1B[0m  \x1B[1;36mrm\x1B[0m    \x1B[1;34mroot\x1B[0m  \x1B[1;34mtmp\x1B[0m   \x1B[1;34mv9fs\x1B[0m\r\n/ # ");
     }
 });
  
