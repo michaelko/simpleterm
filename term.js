@@ -158,9 +158,9 @@ Term.prototype.write = function (string) {
                              }
                              if(string.slice(i+1).match(/^\[0?J/)){     // clear screen from cursor down
                                 for (x = this.x  ; x < this.w  ; x++)
-                                	this.lines[this.y][x] = 32 | this.def_attr << 16;
+                                	this.lines[(this.y + this.y_base)%this.h][x] = 32 | this.def_attr << 16;
 				for (y = this.y+1; y < this.h+1; y++)
-					this.lines[y] = this.newline.slice();
+					this.lines[(y + this.y_base)%this.h] = this.newline.slice();
 				this.refresh(0,this.h-1);
 				j=(/^\[0?J/.exec(string.slice(i+1))).length+1;
 				complete=true;
