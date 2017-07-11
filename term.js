@@ -1,9 +1,10 @@
 // https://github.com/michaelko/simpleterm
 // Released under the terms of the WTFPL
 
-function Term(width, height, hand) {
+function Term(outputSelector, width, height, hand) {
     this.w = width;
     this.h = height;
+    this.outputSelector = outputSelector;
     this.y_base = 0;
     this.x = 0;
     this.y = 0;
@@ -16,17 +17,25 @@ function Term(width, height, hand) {
 }
 Term.prototype.open = function () {
     var y;
+    var rows = ['<table class="terminal-table">']
+    var elem = document.querySelector(this.outputSelector)
+
     this.lines = new Array();
     this.newline = new Array();
+
     for (y = 0; y < this.w; y++)
          this.newline[y] = 32 | (this.def_attr << 16);
     for (y = 0; y < this.h+1; y++)
         this.lines[y] = this.newline.slice();
     for (y = 0; y < this.h; y++)
-        $('#terminal').append('<tr><td class="term" id="tline' + y + '"></td></tr>');
+        rows.push('<tr><td class="term" id="tline' + y + '"></td></tr>');
+
+    this.applyStyles();
+    rows.push('</table>');
+    elem.innerHTML = rows.join('');
     this.refresh(0, this.h - 1);
-    $('#terminal').keydown(this.keyDownHandler.bind(this));
-    $('#terminal').keypress(this.keyPressHandler.bind(this));
+    elem.addEventListener('keydown', this.keyDownHandler.bind(this));
+    elem.addEventListener('keypress', this.keyPressHandler.bind(this));
     that = this;
     setInterval(function () {
         that.cursor_timer_cb();
@@ -45,7 +54,7 @@ Term.prototype.refresh = function (y1, y2) {
             if(cursor_x == x)
             	html += '<span class="termReverse">';
             if(cursor_x == x-1)
-            	html += '</span>';	
+            	html += '</span>';
             if (mode != lastmode) {
                 if (lastmode != this.def_attr)
                     html += '</span>';
@@ -147,7 +156,7 @@ Term.prototype.write = function (string) {
                              	complete=true;
                              	j=1+pos[0].length;
                              }
-                             if(string.slice(i+1).match(/^\[2J/)){     // clear screen 
+                             if(string.slice(i+1).match(/^\[2J/)){     // clear screen
 				for (y = 0; y < this.h+1; y++)
 					this.lines[y] = this.newline.slice();
 				this.y_base=0;
@@ -175,7 +184,7 @@ Term.prototype.write = function (string) {
                         	// There is a charater after esc, but it's not '[', simply ignor the esc.
                         	this.buffer=string.slice(i+1);
                         	complete=true;
-                        }                       
+                        }
                         if(!complete){
                         	this.buffer=string.slice(i);
                         	break write;
@@ -232,13 +241,13 @@ Term.prototype.keyDownHandler = function (event) {
 	120: '\x1b[20~',
 	121: '\x1b[21~',
 	122: '\x1b[23~',
-	123: '\x1b[24~', 
+	123: '\x1b[24~',
     };
     key = table[event.keyCode];
 
     if (event.ctrlKey && event.keyCode >= 65 && event.keyCode <= 90) {
         key = String.fromCharCode(event.keyCode - 64);
-    } 
+    }
     if (event.altKey || event.metaKey) {
         key = "\x1b" + key;
     }
@@ -265,3 +274,27 @@ Term.prototype.keyPressHandler = function (event) {
         return true;
     }
 };
+
+Term.prototype.applyStyles = function () {
+  if (!Term.stylesApplied) {
+    Term.stylesApplied = true;
+    var css = '.term { font-family: courier,fixed,swiss,monospace,sans-serif; font-size: 14px; color: #f0f0f0; background: #000000; }' +
+      '.terminal-table { border-collapse: collapse; }' +
+      '.termReverse { color: #000000; background: #00ff00; }';
+
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+
+    style.type = 'text/css';
+
+    if (style.styleSheet){
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+
+    head.appendChild(style);
+  }
+};
+
+Term.stylesApplied = false;

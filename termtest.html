@@ -1,93 +1,54 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="jquery-1.7.2.js"></script>
-<script src="jquery-ui-1.8.18.custom.min.js"></script>
 
 
 <script src="term.js"></script>
 
 <style>
-.term {
-    font-family: courier,fixed,swiss,monospace,sans-serif;
-    font-size: 14px;
-    color: #f0f0f0;
-    background: #000000;
-}
-
-.termReverse {
-    color: #000000;
-    background: #00ff00;
-}
-#note {
-    font-size: 12px;
-}
-#copyright {
-    font-size: 10px;
-}
-#clipboard {
-    font-size: 12px;
-}
-#display {
-    font-family: courier,fixed,swiss,monospace,sans-serif;
-    font-size: 12px;
-    height: 60%;
-    overflow: scroll;
-}
-</style>
-<link href="jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
-<style>
-.ui-widget-content {
-    font-size: normal;
-}
-.tab {
-    font-size: 12px;
-}
-.ui-widget button, .ui-widget label {
-    font-size: 12px;
-}
 </style>
 </head>
 
-<body>
-<script>
-
-function termhandler(a){
-	console.log(a);
-}
-var term
-$(document).ready(function() {
-    term = new Term(80, 15, termhandler);
-    term.open();
-    
-    if(false){
-	    term.write("Booting Linux on physical CPU\r\n");
-	    term.write("Linux version 3.6.1 (ozaki-r@ubuntu-virtualbox) (gcc version 4.6.3 (Ubuntu/Linar)\r\n");
-	    term.write("#92 Sun Oct 28 03:38:56 JST 2012\r\n");
-	    term.write("CPU: ARMv7 Processor [411ff001] revision 1 (ARMv7), cr=10c03c7d\r\n");
-	    term.write("CPU: PIPT / VIPT nonaliasing data cache, VIVT ASID tagged instruction cache\r\n");
-	    term.write("Machine: ARM-Versatile Express, model: ARM-JS\r\n");
-	    term.write("bootconsole [earlycon0] enabled\r\n");
-	    term.write("Memory policy: ECC disabled, Data cache writeback\n\r");
-	    term.write(String.fromCharCode(27)+"[36m"+String.fromCharCode(27)+"[43m" +" Text"+String.fromCharCode(27)+"[m Normal"); // Esc
-	    term.write("\n\r");
-	    term.write(String.fromCharCode(27));
-	    term.write("[42m Hallo");
-	    term.write(String.fromCharCode(27));
-	    term.write("[4");
-	    term.write("4m Hallo\n\r");
-	    term.write(String.fromCharCode(27)+"[0m ");
-	    term.write(String.fromCharCode(27)+"[3,3H"+ "    TEXT    ");
-    } else {
-    	term.write("\r\n9pnet: Installing 9P2000 support\r\n\x00Freeing init memory: 84K\r\nMounting procfs\r\nMounting v9fs at /v9fs\r\n9pnet_virtio: no channels available\r\nmount: mounting armjs on /v9fs failed: No such file or directory\r\n~ # cd /\r\n/ # ls\r\n\x1B[1;34mbin\x1B[0m   \x1B[1;34mdev\x1B[0m   \x1B[1;34metc\x1B[0m   \x1B[1;32minit\x1B[0m  \x1B[1;34mlib\x1B[0m   \x1B[1;34mproc\x1B[0m  \x1B[1;36mrm\x1B[0m    \x1B[1;34mroot\x1B[0m  \x1B[1;34mtmp\x1B[0m   \x1B[1;34mv9fs\x1B[0m\r\n/ # ");
-    }
-});
- 
-</script>
+<body onload="showTerm()">
 
 <div id=terminal tabindex=0></div>
 
 <a href="#" onclick="term.write('a');">write</a>
+
+<script>
+var term = new Term('#terminal', 80, 15, function (letter) {
+  if (!!letter && letter.length === 1) {
+    term.write(letter);
+  }
+});
+
+function showTerm() {
+  term.open();
+
+  if(false){
+    term.write("Booting Linux on physical CPU\r\n");
+    term.write("Linux version 3.6.1 (ozaki-r@ubuntu-virtualbox) (gcc version 4.6.3 (Ubuntu/Linar)\r\n");
+    term.write("#92 Sun Oct 28 03:38:56 JST 2012\r\n");
+    term.write("CPU: ARMv7 Processor [411ff001] revision 1 (ARMv7), cr=10c03c7d\r\n");
+    term.write("CPU: PIPT / VIPT nonaliasing data cache, VIVT ASID tagged instruction cache\r\n");
+    term.write("Machine: ARM-Versatile Express, model: ARM-JS\r\n");
+    term.write("bootconsole [earlycon0] enabled\r\n");
+    term.write("Memory policy: ECC disabled, Data cache writeback\n\r");
+    term.write(String.fromCharCode(27)+"[36m"+String.fromCharCode(27)+"[43m" +" Text"+String.fromCharCode(27)+"[m Normal"); // Esc
+    term.write("\n\r");
+    term.write(String.fromCharCode(27));
+    term.write("[42m Hallo");
+    term.write(String.fromCharCode(27));
+    term.write("[4");
+    term.write("4m Hallo\n\r");
+    term.write(String.fromCharCode(27)+"[0m ");
+    term.write(String.fromCharCode(27)+"[3,3H"+ "    TEXT    ");
+  } else {
+    term.write("9pnet: Installing 9P2000 support\r\n\x00Freeing init memory: 84K\r\nMounting procfs\r\nMounting v9fs at /v9fs\r\n9pnet_virtio: no channels available\r\nmount: mounting armjs on /v9fs failed: No such file or directory\r\n~ # cd /\r\n/ # ls\r\n\x1B[1;34mbin\x1B[0m   \x1B[1;34mdev\x1B[0m   \x1B[1;34metc\x1B[0m   \x1B[1;32minit\x1B[0m  \x1B[1;34mlib\x1B[0m   \x1B[1;34mproc\x1B[0m  \x1B[1;36mrm\x1B[0m    \x1B[1;34mroot\x1B[0m  \x1B[1;34mtmp\x1B[0m   \x1B[1;34mv9fs\x1B[0m\r\n/ # ");
+  }
+}
+
+</script>
 
 </body>
 </html>
